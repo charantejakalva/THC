@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.kafka.common.protocol.types.Field;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,6 +17,8 @@ public class OpenHours {
     private String day;
     private String timing;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Restaurant restaurant;
 //    public int getId() {
 //        return id;
 //    }

@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 public class OpenHoursDTO {
     private int id;
 
-    private Restaurant restaurant;
+//    private Restaurant restaurant;
     private String day;
     private String timing;
 

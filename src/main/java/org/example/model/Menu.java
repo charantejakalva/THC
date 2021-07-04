@@ -1,5 +1,6 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,12 +16,17 @@ public class Menu {
 
     }
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int menuId;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<MenuItem> menuItems;
 
-
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    @JoinColumn(name = "restaurantId")
+//    private Restaurant restaurant;
 //    public int getMenuId() {
 //        return menuId;
 //    }

@@ -2,6 +2,7 @@ package org.example.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.model.Restaurant;
 
 import java.sql.Timestamp;
 
@@ -13,6 +14,7 @@ public class ReservationDTO {
     private String customerMobile;
     private String customerEmail;
     private Timestamp reservationStartTime;
+//    private Restaurant restaurant;
 
 //    public int getReservationId() {
 //        return reservationId;

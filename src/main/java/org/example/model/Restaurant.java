@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.apache.kafka.common.protocol.types.Field;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,6 +14,7 @@ import java.util.Set;
 public class Restaurant {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int restaurantId;
 
     private String location;
@@ -22,13 +24,13 @@ public class Restaurant {
     private String phoneNumber;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    private Set<Menu> menu;
+    private List<Menu> menu;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    private Set<Reservation> reservations;
+    private List<Reservation> reservations;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    private Set<OpenHours> openHours;
+    private List<OpenHours> openHours;
 
 //    public int getRestaurantId() {
 //        return restaurantId;

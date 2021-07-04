@@ -3,6 +3,7 @@ package org.example.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.model.MenuItem;
+import org.example.model.Restaurant;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ public class MenuDTO {
     private int menuId;
 
     private Set<MenuItem> menuItems;
+//    private Restaurant restaurant;
 
 //    public int getMenuId() {
 //        return menuId;

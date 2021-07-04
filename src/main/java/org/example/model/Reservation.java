@@ -1,11 +1,13 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.kafka.common.protocol.types.Field;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -13,11 +15,18 @@ import java.sql.Timestamp;
 @Setter
 public class Reservation {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int reservationId;
     private String customerName;
     private String customerMobile;
     private String customerEmail;
     private Timestamp reservationStartTime;
+
+//    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "restaurantId",nullable = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JsonIgnore
+//    private Restaurant restaurant;
 
 //    public int getReservationId() {
 //        return reservationId;

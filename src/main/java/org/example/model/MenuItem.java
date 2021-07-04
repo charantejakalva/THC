@@ -3,18 +3,21 @@ package org.example.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 public class MenuItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int menuItemId;
     private String itemName;
     private float price;
     private String description;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Menu menu;
 
 
 //    public int getMenuItemId() {

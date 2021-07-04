@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -23,11 +24,11 @@ public class RestaurantDTO {
 
     private String phoneNumber;
 
-    private Set<Menu> menu;
+    private List<Menu> menu;
 
-    private Set<Reservation> reservations;
+    private List<Reservation> reservations;
 
-    private OpenHours openHours;
+    private List<OpenHours> openHours;
 
 //    public int getRestaurantId() {
 //        return restaurantId;

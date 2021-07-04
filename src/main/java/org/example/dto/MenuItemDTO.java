@@ -2,6 +2,7 @@ package org.example.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.model.Menu;
 
 @Getter
 @Setter
@@ -11,7 +12,7 @@ public class MenuItemDTO {
 
     private float price;
     private String description;
-
+//    private Menu menu;
 //    public int getMenuItemId() {
 //        return menuItemId;
 //    }
