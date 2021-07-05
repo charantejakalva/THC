@@ -15,8 +15,10 @@ public class Interceptor {
 //    @Id
 //    private  int id;
     @Id
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private String startTime;
+    private String endTime;
     private String request;
     private long executionTime;
+    private String serviceEndPoint;
+    private String methodName;
 }

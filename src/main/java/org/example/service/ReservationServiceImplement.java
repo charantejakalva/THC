@@ -12,10 +12,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ReservationServiceImplement implements ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -26,12 +28,18 @@ public class ReservationServiceImplement implements ReservationService {
     }
 
     @Override
-    public ReservationDTO addReservation(ReservationDTO reservationDTO) {
+    public ReservationDTO addReservation(int restaurantId,ReservationDTO reservationDTO) {
         try {
 //            ReservationDTO reservationDTO;
             Reservation reservation = convertDTOtoEntity(reservationDTO);
-            Reservation responseEntity = reservationRepository.save(reservation);
-            return convertEntitytoDTO(responseEntity);
+            Restaurant restaurant = restaurantRepository.findById(Integer.toString(restaurantId)).get();
+            List<Reservation> reservationList = restaurant.getReservations();
+            reservationList.add(reservation);
+            restaurant.setReservations(reservationList);
+            int reservationId = reservation.getReservationId();
+            Restaurant responseEntity = restaurantRepository.save(restaurant);
+
+            return convertEntitytoDTO(reservationRepository.findById(Integer.toString(reservationId)).get());
         }
         catch (Exception e){
             throw  new ReservationServiceException("Cannot Add Reservation");
@@ -62,11 +70,11 @@ public class ReservationServiceImplement implements ReservationService {
             List<Reservation> reservation = restaurant.getReservations();
 
             List<ReservationDTO> reservationDTOList =  new ArrayList<>();
-            int last = Math.min(reservation.size(), (page+1)*(size)) ;
-            for (int i =(page*size); i < last;i++){
-                if(reservation.get(i).getReservationId() == restaurantId) {
+            int last = Math.min(reservation.size(), (page)*(size)) ;
+            for (int i =((page-1)*size); i < last;i++){
+//                if(reservation.get(i).getReservationId() == restaurantId) {
                     reservationDTOList.add(convertEntitytoDTO(reservation.get(i)));
-                }
+//                }
             }
 //            if(reservationDTOList.size() > 0){
 //                return reservationDTOList.get(0);
