@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  app:
+    container_name: thc
+    image: thc
+    build: ./
+    ports:
+      - "8300:80"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3307/thc_db
+      - SPRING_DATASOURCE_USERNAME=sample
+      - SPRING_DATASOURCE_PASSWORD=sample
+
+  db:
+    image: 'mysql'
+    container_name: db
+    ports:
+      - "3307:3307"
+    environment:
+      - MYSQL_USER=sample
+      - MYSQL_PASSWORD=sample
+      - MYSQL_DB=order123

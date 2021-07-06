@@ -39,6 +39,22 @@ public class RestaurantController {
                 .data((service.getRestaurant(page,size))).build();
     }
 
+
+    @ApiOperation(value = "Add a restaurant", notes = "Provide needed details to add a restaurant")
+    @ApiResponses(value = {
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+            @ApiResponse(code = 200, message = "Successful")
+    })
+    @PostMapping("/restaurant")
+    public Response<RestaurantDTO> addRestaurant(RestaurantDTO restaurantDTO ){
+        return Response.<RestaurantDTO>builder().meta(ResponseMetadata.builder()
+                .statusCode(200)
+                .statusMessage(StatusMessage.SUCCESS.name())
+                .build())
+                .data((service.addRestaurant(restaurantDTO))).build();
+    }
+
+
     @GetMapping("/restaurant/{id}")
     @ApiOperation(value = "Get Restaurant By Id.", notes = "Pass the id of the restaurant that you want to see details about.")
     @ApiResponses(value = {
@@ -70,18 +86,11 @@ public class RestaurantController {
     })
     public Response<RestaurantDTO> updateRestaurant(@RequestBody RestaurantDTO restaurantDTO){
 
-        if( service.updateRestaurant(restaurantDTO) == null){
-            return  Response.<RestaurantDTO>builder().meta(ResponseMetadata.builder()
-                    .statusCode(404)
-                    .statusMessage(HttpStatus.NOT_FOUND.toString()).build()
-            ).data(null).build();
-        }
-        else {
             return Response.<RestaurantDTO>builder().meta(ResponseMetadata.builder()
                     .statusCode(200)
                     .statusMessage(HttpStatus.OK.toString()).build()
             ).data((service.updateRestaurant(restaurantDTO))).build();
-        }
+
     }
 
     @DeleteMapping("/restaurant/delete/{id}")

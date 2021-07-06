@@ -1,10 +1,12 @@
 package org.example.service;
 
+import org.example.dto.ReservationDTO;
 import org.example.dto.RestaurantDTO;
 import org.example.exception.RestaurantServiceException;
 import org.example.model.*;
 import org.example.repository.RestaurantRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -119,22 +121,24 @@ public class RestaurantServiceImplement implements RestaurantService{
         try {
             int id = restaurantDTO.getRestaurantId();
 
-            if (restaurantRepository.findById(Integer.toString(id)).isPresent()) {
                 Restaurant restaurant = restaurantRepository.findById(Integer.toString(id)).get();
 
                 restaurant.setRestaurantName(restaurantDTO.getRestaurantName());
-                restaurant.setReservations(restaurantDTO.getReservations());
-                restaurant.setOpenHours(restaurantDTO.getOpenHours());
+                List<Reservation> reservations = new ArrayList<>();
+                BeanUtils.copyProperties(restaurantDTO.getReservations(), reservations);
+                restaurant.setReservations(reservations);
+                List<OpenHours> openHours = new ArrayList<>();
+                BeanUtils.copyProperties(restaurantDTO.getOpenHours(), openHours);
+                restaurant.setOpenHours(openHours);
+                List<Menu> menus = new ArrayList<>();
+                BeanUtils.copyProperties(restaurantDTO.getMenu(), menus);
+                restaurant.setMenu(menus);
                 restaurant.setLocation(restaurantDTO.getLocation());
-                restaurant.setMenu(restaurantDTO.getMenu());
                 restaurant.setPhoneNumber(restaurantDTO.getPhoneNumber());
 
                 Restaurant responseRestaurant = restaurantRepository.save(restaurant);
                 return convertEntitytoDTO(responseRestaurant);
-            }
-            else{
-                return null;
-            }
+
         }
         catch (Exception e){
             throw  new RestaurantServiceException("Cannot update the Restaurant");

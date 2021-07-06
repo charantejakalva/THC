@@ -3,6 +3,7 @@ package org.example.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.kafka.common.protocol.types.Field;
+import org.example.dto.OpenHoursDTO;
 
 import javax.persistence.*;
 import java.util.List;

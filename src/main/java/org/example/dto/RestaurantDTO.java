@@ -24,11 +24,11 @@ public class RestaurantDTO {
 
     private String phoneNumber;
 
-    private List<Menu> menu;
+    private List<MenuDTO> menu;
 
-    private List<Reservation> reservations;
+    private List<ReservationDTO> reservations;
 
-    private List<OpenHours> openHours;
+    private List<OpenHoursDTO> openHours;
 
 //    public int getRestaurantId() {
 //        return restaurantId;
