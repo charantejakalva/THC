@@ -3,6 +3,7 @@ package org.example.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,9 +16,9 @@ public class Menu {
     public Menu(){
 
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int menuId;
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String menuId;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<MenuItem> menuItems;

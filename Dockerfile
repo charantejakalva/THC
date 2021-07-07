@@ -6,5 +6,5 @@
 FROM openjdk
 VOLUME /tmp
 EXPOSE 8300
-ADD target/libs/jarfile.jar thc.jar
+ADD out/artifacts/THC_jar/THC.jar thc.jar
 ENTRYPOINT ["java","-jar","/thc.jar"]

@@ -2,6 +2,7 @@ package org.example.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -9,9 +10,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class MenuItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int menuItemId;
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String menuItemId;
     private String itemName;
     private float price;
     private String description;

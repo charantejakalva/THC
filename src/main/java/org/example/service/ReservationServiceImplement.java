@@ -28,18 +28,18 @@ public class ReservationServiceImplement implements ReservationService {
     }
 
     @Override
-    public ReservationDTO addReservation(int restaurantId,ReservationDTO reservationDTO) {
+    public ReservationDTO addReservation(String restaurantId,ReservationDTO reservationDTO) {
         try {
 //            ReservationDTO reservationDTO;
             Reservation reservation = convertDTOtoEntity(reservationDTO);
-            Restaurant restaurant = restaurantRepository.findById(Integer.toString(restaurantId)).get();
+            Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
             List<Reservation> reservationList = restaurant.getReservations();
             reservationList.add(reservation);
             restaurant.setReservations(reservationList);
-            int reservationId = reservation.getReservationId();
+            String reservationId = reservation.getReservationId();
             Restaurant responseEntity = restaurantRepository.save(restaurant);
 
-            return convertEntitytoDTO(reservationRepository.findById(Integer.toString(reservationId)).get());
+            return convertEntitytoDTO(reservationRepository.findById(reservationId).get());
         }
         catch (Exception e){
             throw  new ReservationServiceException("Cannot Add Reservation");
@@ -59,13 +59,13 @@ public class ReservationServiceImplement implements ReservationService {
 
     }
     @Override
-    public List<ReservationDTO> getReservations(int restaurantId, int page, int size) {
+    public List<ReservationDTO> getReservations(String restaurantId, int page, int size) {
         try{
 //            Pageable pageDetails = PageRequest.of(page, size);
 
 //            List<Reservation> reservation =  (List<Reservation>) reservationRepository.findAll();
 //            List<Reservation> reservation =  (List<Reservation>) reservationRepository.findAll(pageDetails).getContent();
-            Restaurant restaurant = restaurantRepository.findById(Integer.toString(restaurantId)).get();
+            Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
 
             List<Reservation> reservation = restaurant.getReservations();
 
@@ -106,7 +106,7 @@ public class ReservationServiceImplement implements ReservationService {
     }
     @Override
     public ReservationDTO updateReservation(ReservationDTO reservationDTO) {
-        if(reservationRepository.findById(Integer.toString(reservationDTO.getReservationId())).isPresent()){
+        if(reservationRepository.findById(reservationDTO.getReservationId()).isPresent()){
             try{
 
             Reservation reservation = new Reservation();
@@ -142,10 +142,10 @@ public class ReservationServiceImplement implements ReservationService {
     }
 
     @Override
-    public ReservationDTO getReservationById(int id) {
+    public ReservationDTO getReservationById(String id) {
         try {
-            if(reservationRepository.findById(Integer.toString(id)).isPresent()) {
-                return convertEntitytoDTO(reservationRepository.findById(Integer.toString(id)).get());
+            if(reservationRepository.findById(id).isPresent()) {
+                return convertEntitytoDTO(reservationRepository.findById(id).get());
             }
             else{
                 return null;

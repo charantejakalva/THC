@@ -24,7 +24,7 @@ public class MenuServiceImplement implements MenuService {
     }
 
     @Override
-    public MenuDTO addMenu(int restaurantId, MenuDTO menuDTO) {
+    public MenuDTO addMenu(String restaurantId, MenuDTO menuDTO) {
        try{
            MenuDTO responseDTO;
            Menu menu = convertDTOtoEntity(menuDTO);
@@ -39,10 +39,10 @@ public class MenuServiceImplement implements MenuService {
     }
 
     @Override
-    public List<MenuDTO> getMenuOfRestaurant(int restaurantId, int page, int size) {
+    public List<MenuDTO> getMenuOfRestaurant(String restaurantId, int page, int size) {
         try{
 //            Pageable pageDetails = PageRequest.of(page, size);
-              Restaurant restaurant = restaurantRepository.findById(Integer.toString(restaurantId)).get();
+              Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
             List<Menu> menuList = restaurant.getMenu();
             List<MenuDTO> menuDTOList =  new ArrayList<>();
             int last = Math.min(menuList.size(), (page)*(size)) ;
@@ -58,7 +58,7 @@ public class MenuServiceImplement implements MenuService {
 
     @Override
     public MenuDTO updateMenu(MenuDTO menuDTO) {
-        if(menuRepository.findById(Integer.toString(menuDTO.getMenuId())).isPresent()){
+        if(menuRepository.findById( menuDTO.getMenuId()).isPresent()){
             try{
                 Menu menu = new Menu();
                 menu.setMenuId(menuDTO.getMenuId());
@@ -93,9 +93,9 @@ public class MenuServiceImplement implements MenuService {
     }
 
     @Override
-    public MenuDTO getMenuById(int id) {try {
-        if(menuRepository.findById(Integer.toString(id)).isPresent()) {
-            return convertEntitytoDTO(menuRepository.findById(Integer.toString(id)).get());
+    public MenuDTO getMenuById(String id) {try {
+        if(menuRepository.findById(id).isPresent()) {
+            return convertEntitytoDTO(menuRepository.findById(id).get());
         }
         else{
             return null;

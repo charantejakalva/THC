@@ -11,11 +11,11 @@ public interface RestaurantService {
 
     RestaurantDTO addRestaurant(RestaurantDTO restaurantDTO);
 
-    Optional<RestaurantDTO> getRestaurantById(Integer id);
+    Optional<RestaurantDTO> getRestaurantById(String id);
 
     RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO);
 
-    String deleteRestaurant(Integer id);
+    String deleteRestaurant(String id);
 
     String createRandomRestaurant(int num);
 }

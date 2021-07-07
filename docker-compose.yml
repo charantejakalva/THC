@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.9"
 services:
   app:
     container_name: thc
@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3307/thc_db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3307/thc_db?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=sample
       - SPRING_DATASOURCE_PASSWORD=sample
 
@@ -19,6 +19,12 @@ services:
     ports:
       - "3307:3307"
     environment:
+#      - MYSQL_DATABASE: thc_db
       - MYSQL_USER=sample
-      - MYSQL_PASSWORD=sample
-      - MYSQL_DB=order123
+      - MYSQL_PASSWORD:sample
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DB=thc_db
+#    volumes:
+#      - db-data:/var/lib/mysql
+#  volumes:
+#    db-data:

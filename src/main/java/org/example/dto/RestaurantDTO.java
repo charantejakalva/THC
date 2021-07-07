@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class RestaurantDTO {
-    private int restaurantId;
+    private String restaurantId;
 
     private String location;
 

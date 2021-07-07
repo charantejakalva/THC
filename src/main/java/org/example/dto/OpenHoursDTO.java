@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 public class OpenHoursDTO {
-    private int id;
+    private String id;
 
 //    private Restaurant restaurant;
     private String day;

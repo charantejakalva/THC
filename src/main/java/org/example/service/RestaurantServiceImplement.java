@@ -1,11 +1,14 @@
 package org.example.service;
 
+import org.example.dto.MenuDTO;
+import org.example.dto.OpenHoursDTO;
 import org.example.dto.ReservationDTO;
 import org.example.dto.RestaurantDTO;
 import org.example.exception.RestaurantServiceException;
 import org.example.model.*;
 import org.example.repository.RestaurantRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +26,12 @@ import java.util.Optional;
 
 @Service
 public class RestaurantServiceImplement implements RestaurantService{
-    private final RestaurantRepository restaurantRepository;
+    @Autowired
+    RestaurantRepository restaurantRepository;
     public  RestaurantServiceImplement(RestaurantRepository restaurantRepository){
         this.restaurantRepository=restaurantRepository;
     }
-
+    public RestaurantServiceImplement(){}
     public List<RestaurantDTO> getRestaurant(Integer page, Integer size) {
         Pageable pageDetails = PageRequest.of(page, size);
 
@@ -38,11 +42,7 @@ public class RestaurantServiceImplement implements RestaurantService{
         for (int i =0; i < restaurants.size();i++){
             restaurantDTOList.add(convertEntitytoDTO(restaurants.get(i)));
         }
-//        if(restaurantDTOList.size() > 0){
-//            return restaurantDTOList;
-//        }
-//        else
-//            return null;
+
 
         return restaurantDTOList;
     }
@@ -97,41 +97,73 @@ public class RestaurantServiceImplement implements RestaurantService{
     }
 
     private RestaurantDTO convertEntitytoDTO(Restaurant restaurant) {
-        RestaurantDTO restaurantDto = new RestaurantDTO();
-        BeanUtils.copyProperties(restaurant, restaurantDto);
-        return restaurantDto;
+        RestaurantDTO restaurantDTO = new RestaurantDTO();
+        BeanUtils.copyProperties(restaurant, restaurantDTO);
+
+        List<ReservationDTO> reservations =  MapperUtil.mapList(restaurant.getReservations(), ReservationDTO.class);
+        restaurantDTO.setReservations(reservations);
+        List<OpenHoursDTO> openHours =  MapperUtil.mapList(restaurant.getOpenHours(), OpenHoursDTO.class);
+        restaurantDTO.setOpenHours(openHours);
+        List<MenuDTO> menus =  MapperUtil.mapList(restaurant.getMenu(), MenuDTO.class);
+        restaurantDTO.setMenu(menus);
+
+        return restaurantDTO;
     }
     private Restaurant convertDTOtoEntity(RestaurantDTO restaurantDTO){
         Restaurant restaurant = new Restaurant();
         BeanUtils.copyProperties(restaurantDTO,restaurant);
+        List<Reservation> reservations =  MapperUtil.mapList(restaurantDTO.getReservations(), Reservation.class);
+        restaurant.setReservations(reservations);
+        List<OpenHours> openHours =  MapperUtil.mapList(restaurantDTO.getOpenHours(), OpenHours.class);
+        restaurant.setOpenHours(openHours);
+        List<Menu> menus =  MapperUtil.mapList(restaurantDTO.getMenu(), Menu.class);
+        restaurant.setMenu(menus);
+
 
         return restaurant;
 
     }
 
     @Override
-    public Optional<RestaurantDTO> getRestaurantById(Integer id) {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(id.toString());
-        RestaurantDTO restaurantDTO = convertEntitytoDTO(restaurant.get());
-        return  Optional.of(restaurantDTO);
+    public Optional<RestaurantDTO> getRestaurantById(String id) {
+        try {
+            if(restaurantRepository.findById(id).isPresent()) {
+                Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+                RestaurantDTO restaurantDTO = convertEntitytoDTO(restaurant.get());
+                return Optional.of(restaurantDTO);
+            }
+            else{
+                return null;
+            }
+        }
+        catch (Exception e){
+            throw new RestaurantServiceException("Restaurant Not Found");
+        }
     }
 
     @Override
     public RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO) {
         try {
-            int id = restaurantDTO.getRestaurantId();
+            String id = restaurantDTO.getRestaurantId();
 
-                Restaurant restaurant = restaurantRepository.findById(Integer.toString(id)).get();
+                Restaurant restaurant = restaurantRepository.findById(id).get();
 
                 restaurant.setRestaurantName(restaurantDTO.getRestaurantName());
-                List<Reservation> reservations = new ArrayList<>();
-                BeanUtils.copyProperties(restaurantDTO.getReservations(), reservations);
+
+//                List<Reservation> reservations = new ArrayList<>();
+//                BeanUtils.copyProperties(restaurantDTO.getReservations(), reservations);
+//                restaurant.setReservations(reservations);
+//                List<OpenHours> openHours = new ArrayList<>();
+//                BeanUtils.copyProperties(restaurantDTO.getOpenHours(), openHours);
+//                restaurant.setOpenHours(openHours);
+//                List<Menu> menus = new ArrayList<>();
+//                BeanUtils.copyProperties(restaurantDTO.getMenu(), menus);
+//                restaurant.setMenu(menus);
+                List<Reservation> reservations =  MapperUtil.mapList(restaurantDTO.getReservations(), Reservation.class);
                 restaurant.setReservations(reservations);
-                List<OpenHours> openHours = new ArrayList<>();
-                BeanUtils.copyProperties(restaurantDTO.getOpenHours(), openHours);
+                List<OpenHours> openHours =  MapperUtil.mapList(restaurantDTO.getOpenHours(), OpenHours.class);
                 restaurant.setOpenHours(openHours);
-                List<Menu> menus = new ArrayList<>();
-                BeanUtils.copyProperties(restaurantDTO.getMenu(), menus);
+                List<Menu> menus =  MapperUtil.mapList(restaurantDTO.getMenu(), Menu.class);
                 restaurant.setMenu(menus);
                 restaurant.setLocation(restaurantDTO.getLocation());
                 restaurant.setPhoneNumber(restaurantDTO.getPhoneNumber());
@@ -147,10 +179,10 @@ public class RestaurantServiceImplement implements RestaurantService{
     }
 
     @Override
-    public String deleteRestaurant(Integer id) {
+    public String deleteRestaurant(String id) {
         try {
 
-            restaurantRepository.deleteById(id.toString());
+            restaurantRepository.deleteById(id);
             return "Deleted Successfully";
         }
         catch (Exception ex){

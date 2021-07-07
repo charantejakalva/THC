@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class ReservationStreamDTO {
 
-    private int restaurantId;
+    private String restaurantId;
 
     private ReservationDTO reservationDTO;
 }

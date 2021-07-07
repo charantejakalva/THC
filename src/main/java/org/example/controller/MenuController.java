@@ -29,7 +29,7 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<List<MenuDTO>> getMenuOfRestaurant(@PathVariable(value = "id") int restaurantId,
+    public Response<List<MenuDTO>> getMenuOfRestaurant(@PathVariable(value = "id") String restaurantId,
                                            @PathVariable(value = "page") int page,
                                            @PathVariable(value = "size") int size){
 
@@ -47,7 +47,7 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<MenuDTO> getMenuById(@PathVariable int id){
+    public Response<MenuDTO> getMenuById(@PathVariable String id){
 
         if( service.getMenuById(id) == null){
             return  Response.< MenuDTO>builder().meta(ResponseMetadata.builder()
@@ -71,7 +71,7 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<MenuDTO> addReservation(@PathVariable(value = "id") int restaurantId,
+    public Response<MenuDTO> addReservation(@PathVariable(value = "id") String restaurantId,
                                                    @RequestBody MenuDTO menuDTO){
 
 

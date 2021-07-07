@@ -2,8 +2,7 @@ package org.example.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.kafka.common.protocol.types.Field;
-import org.example.dto.OpenHoursDTO;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,9 +13,9 @@ import java.util.Set;
 @Setter
 public class Restaurant {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int restaurantId;
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String restaurantId;
 
     private String location;
 

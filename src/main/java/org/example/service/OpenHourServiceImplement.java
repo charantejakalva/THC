@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.dto.OpenHoursDTO;
 import org.example.exception.OpenHourServiceException;
 import org.example.model.OpenHours;
+import org.example.model.Reservation;
 import org.example.model.Restaurant;
 import org.example.repository.OpenHourRepository;
 import org.example.repository.RestaurantRepository;
@@ -24,8 +25,21 @@ public class OpenHourServiceImplement implements  OpenHourService{
         this.restaurantRepository = restaurantRepository;
     }
     @Override
-    public OpenHoursDTO addOpenHour(int restaurantId, OpenHoursDTO openHoursDTO) {
-        return null;
+    public OpenHoursDTO addOpenHour(String restaurantId, OpenHoursDTO openHoursDTO) {
+       try{
+           OpenHours openHours = convertDTOtoEntity(openHoursDTO);
+           Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
+           List<OpenHours> openHoursList = restaurant.getOpenHours();
+           openHoursList.add(openHours);
+           restaurant.setOpenHours(openHoursList);
+           String openHoursId = openHours.getId();
+           Restaurant responseEntity = restaurantRepository.save(restaurant);
+
+           return convertEntitytoDTO(openHourRepository.findById(openHoursId).get());
+       }
+       catch (Exception e){
+           throw new OpenHourServiceException("Cannot add OpenHours");
+       }
     }
 
     @Override
@@ -48,9 +62,9 @@ public class OpenHourServiceImplement implements  OpenHourService{
     }
 
     @Override
-    public List<OpenHoursDTO> getOpenHourOfRestaurant(int restaurantId, int page, int size) {
+    public List<OpenHoursDTO> getOpenHourOfRestaurant(String restaurantId, int page, int size) {
         try {
-            Restaurant restaurant = restaurantRepository.findById(Integer.toString(restaurantId)).get();
+            Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
 
             List<OpenHours> openHoursList = restaurant.getOpenHours();
 
@@ -69,7 +83,7 @@ public class OpenHourServiceImplement implements  OpenHourService{
 
     @Override
     public OpenHoursDTO updateOpenHour(OpenHoursDTO openHoursDTO) {
-        if(openHourRepository.findById(Integer.toString(openHoursDTO.getId())).isPresent()) {
+        if(openHourRepository.findById(openHoursDTO.getId()).isPresent()) {
             try {
                 OpenHours openHours = new OpenHours(); //openHourRepository.findById(Integer.toString(openHoursDTO.getId())).get();
                 openHours.setDay(openHoursDTO.getDay());
@@ -102,10 +116,10 @@ public class OpenHourServiceImplement implements  OpenHourService{
     }
 
     @Override
-    public OpenHoursDTO getOpenHourById(int id) {
+    public OpenHoursDTO getOpenHourById(String id) {
         try {
-            if(openHourRepository.findById(Integer.toString(id)).isPresent()) {
-                return convertEntitytoDTO(openHourRepository.findById(Integer.toString(id)).get());
+            if(openHourRepository.findById(id).isPresent()) {
+                return convertEntitytoDTO(openHourRepository.findById(id).get());
             }
             else{
                 return null;

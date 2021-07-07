@@ -7,7 +7,7 @@ import org.example.model.Menu;
 @Getter
 @Setter
 public class MenuItemDTO {
-    private int menuItemId;
+    private String menuItemId;
     private String itemName;
 
     private float price;

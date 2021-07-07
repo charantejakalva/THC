@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class MenuDTO {
-    private int menuId;
+    private String menuId;
 
     private Set<MenuItem> menuItems;
 //    private Restaurant restaurant;

@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationService {
-    ReservationDTO addReservation(int restaurantId,ReservationDTO reservationDTO);
+    ReservationDTO addReservation(String restaurantId,ReservationDTO reservationDTO);
     List<ReservationDTO> getAllReservations(int page,int size);
-    List<ReservationDTO> getReservations(int id, int page, int size);
+    List<ReservationDTO> getReservations(String id, int page, int size);
     ReservationDTO updateReservation(ReservationDTO reservationDTO);
     String deleteReservation(ReservationDTO reservationDTO);
-    ReservationDTO getReservationById(int id);
+    ReservationDTO getReservationById(String id);
 }

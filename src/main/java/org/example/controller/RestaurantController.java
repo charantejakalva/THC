@@ -31,7 +31,8 @@ public class RestaurantController {
             @ApiResponse(code = 200, message = "Successful")
     })
     @GetMapping("/restaurant/{page}/{size}")
-    public Response<List<RestaurantDTO>> getRestaurants(@PathVariable  Integer page, @PathVariable Integer size){
+    public Response<List<RestaurantDTO>> getRestaurants(@ApiParam(required = true,defaultValue = "0") @PathVariable  Integer page,
+                                                        @ApiParam(required = true,defaultValue = "1") @PathVariable Integer size){
         return Response.<List<RestaurantDTO>>builder().meta(ResponseMetadata.builder()
                                                     .statusCode(200)
                                                     .statusMessage(StatusMessage.SUCCESS.name())
@@ -62,20 +63,14 @@ public class RestaurantController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<Optional<RestaurantDTO>> getRestaurantById(@PathVariable int id){
+    public Response<Optional<RestaurantDTO>> getRestaurantById(@PathVariable String id){
 
-        if( service.getRestaurantById(id) == null){
-            return  Response.<Optional<RestaurantDTO>>builder().meta(ResponseMetadata.builder()
-                    .statusCode(404)
-                    .statusMessage(HttpStatus.NOT_FOUND.toString()).build()
-            ).data(null).build();
-        }
-        else {
+
             return Response.<Optional<RestaurantDTO>>builder().meta(ResponseMetadata.builder()
                     .statusCode(200)
                     .statusMessage(HttpStatus.OK.toString()).build()
             ).data((service.getRestaurantById(id))).build();
-        }
+
     }
     @PutMapping("/restaurant/update")
     @ApiOperation(value = "Update any field in Restaurant by passing the updated information. ")
@@ -100,7 +95,7 @@ public class RestaurantController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<String> deleteRestaurant(@PathVariable int id){
+    public Response<String> deleteRestaurant(@PathVariable String id){
         
         return Response.<String>builder().meta(ResponseMetadata.builder()
         .statusCode(200)

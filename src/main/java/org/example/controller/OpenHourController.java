@@ -28,7 +28,7 @@ public class OpenHourController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<List<OpenHoursDTO>> getOpenHour(@PathVariable(value = "id") int restaurantId,
+    public Response<List<OpenHoursDTO>> getOpenHour(@PathVariable(value = "id") String restaurantId,
                                                           @PathVariable(value = "page") int page,
                                                           @PathVariable(value = "size") int size){
         return  Response.<List<OpenHoursDTO>>builder().meta(ResponseMetadata.builder()
@@ -64,7 +64,7 @@ public class OpenHourController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<OpenHoursDTO> getOpenHourById(@PathVariable int id){
+    public Response<OpenHoursDTO> getOpenHourById(@PathVariable String id){
 
         if( service.getOpenHourById(id) == null){
             return  Response.<OpenHoursDTO>builder().meta(ResponseMetadata.builder()
@@ -88,7 +88,7 @@ public class OpenHourController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<OpenHoursDTO> addReservation(@PathVariable(value = "id") int restaurantId,
+    public Response<OpenHoursDTO> addReservation(@PathVariable(value = "id") String restaurantId,
                                                  @RequestBody OpenHoursDTO openHoursDTO){
         return Response.<OpenHoursDTO>builder().meta(ResponseMetadata.builder()
                 .statusCode(200)
