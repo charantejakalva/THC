@@ -1,5 +1,6 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class Reservation {
     private String customerName;
     private String customerMobile;
     private String customerEmail;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Timestamp reservationStartTime;
 
 //    @ManyToOne( fetch = FetchType.LAZY, optional = false)

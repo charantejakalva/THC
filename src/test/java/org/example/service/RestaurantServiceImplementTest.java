@@ -5,9 +5,11 @@ import org.example.dto.MenuDTO;
 import org.example.dto.OpenHoursDTO;
 import org.example.dto.ReservationDTO;
 import org.example.dto.RestaurantDTO;
+import org.example.exception.RestaurantServiceException;
 import org.example.model.Interceptor;
 import org.example.model.Menu;
 import org.example.model.Reservation;
+import org.example.model.Restaurant;
 import org.example.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -43,17 +45,16 @@ class RestaurantServiceImplementTest {
     void tearDown() {
     }
 
-//    @Test
-//    void getRestaurant() {
-//        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
-//        doReturn(restaurantDTOList).when(restaurantServiceImplement).getRestaurant(any(),any());
-//
-//        Response<List<RestaurantDTO>> res = restaurantController.getRestaurants(1,1);
-//        Assertions.assertEquals(res.getData(),createData().getRestaurantId());
-//
+    @Test
+    void getRestaurant() {
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+        restaurantDTOList.add(createData());
+        doReturn(restaurantDTOList).when(restaurantServiceImplement).getRestaurant(any(),any());
+        Response<List<RestaurantDTO>> res = restaurantController.getRestaurants(0,1);
+        Assertions.assertEquals(res.getData().get(0).getRestaurantId(),createData().getRestaurantId());
+
 //        Assertions.assertEquals(res.getData() ,createData().getRestaurantName());
-//
-//    }
+    }
 
     @Test
     void addRestaurant() {
@@ -75,26 +76,46 @@ class RestaurantServiceImplementTest {
         Assertions.assertEquals(res.getData().get().getRestaurantName(),createData().getRestaurantName());
 
     }
-
+    @Test
+    void getRestaurantById2() {
+        doReturn(null).when(restaurantServiceImplement).getRestaurantById(any());
+        Response<Optional<RestaurantDTO>> res = restaurantController.getRestaurantById("char");
+        Assertions.assertNull(res.getData());
+//        Assertions.assertThrows(RestaurantServiceException.class, ()->
+//        { restaurantController.getRestaurantById("char"); });
+    }
     @Test
     void updateRestaurant() {
         doReturn(createData()).when(restaurantServiceImplement).updateRestaurant(any());
-
         Response<RestaurantDTO> res = restaurantController.updateRestaurant(createData());
         Assertions.assertEquals(res.getData().getRestaurantId(),createData().getRestaurantId());
         Assertions.assertEquals(res.getData().getRestaurantName(),createData().getRestaurantName());
-
     }
-
-
+    @Test
+    void updateRestaurant2() {
+        doReturn(null).when(restaurantServiceImplement).updateRestaurant(any());
+        RestaurantDTO restaurantDTO = createData();
+        restaurantDTO.setRestaurantId("Char");
+        Response<RestaurantDTO> res = restaurantController.updateRestaurant(restaurantDTO);
+        Assertions.assertNull(res.getData());
+    }
     @Test
     void deleteRestaurant() {
         doReturn("Deleted Successfully").when(restaurantServiceImplement).deleteRestaurant(any());
-
         Response<String> res = restaurantController.deleteRestaurant(createData().getRestaurantId());
         Assertions.assertEquals(res.getData(), "Deleted Successfully");
-
-
+    }
+    @Test
+    void deleteRestaurant2() {
+        doReturn("Problem in Deletion").when(restaurantServiceImplement).deleteRestaurant(any());
+        try {
+        Response<String> res = restaurantController.deleteRestaurant("char");
+        System.out.println(res);
+//        Assertions.assertEquals(res.getData(), "Deleted Successfully");
+//            fail("Exception not thrown");
+        } catch (RestaurantServiceException e) {
+            assertEquals("Problem in Deletion", e.getMessage());
+        }
     }
 
     @Test

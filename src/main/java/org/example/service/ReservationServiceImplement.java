@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImplement implements ReservationService {
@@ -31,18 +32,24 @@ public class ReservationServiceImplement implements ReservationService {
     public ReservationDTO addReservation(String restaurantId,ReservationDTO reservationDTO) {
         try {
 //            ReservationDTO reservationDTO;
+
             Reservation reservation = convertDTOtoEntity(reservationDTO);
             Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
             List<Reservation> reservationList = restaurant.getReservations();
             reservationList.add(reservation);
             restaurant.setReservations(reservationList);
-            String reservationId = reservation.getReservationId();
+//            String reservationId = reservation.getReservationId();
             Restaurant responseEntity = restaurantRepository.save(restaurant);
-
-            return convertEntitytoDTO(reservationRepository.findById(reservationId).get());
+            Optional<Reservation> responseReservation = responseEntity.getReservations().stream().
+                    filter(p -> p.getCustomerEmail().equals(reservation.getCustomerEmail()) &&
+                            p.getReservationStartTime().equals(reservation.getReservationStartTime()) &&
+                            p.getCustomerMobile().equals(reservation.getCustomerMobile())
+                            ).
+                    findFirst();
+            return convertEntitytoDTO(responseReservation.get());
         }
         catch (Exception e){
-            throw  new ReservationServiceException("Cannot Add Reservation");
+            throw  new ReservationServiceException(e.getMessage());
         }
     }
 
