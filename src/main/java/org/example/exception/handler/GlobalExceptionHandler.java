@@ -1,7 +1,9 @@
 package org.example.exception.handler;
 
 import lombok.extern.log4j.Log4j2;
-import lombok.var;
+//import lombok.var;
+import org.example.exception.MenuServiceException;
+import org.example.exception.OpenHourServiceException;
 import org.example.exception.RestaurantServiceException;
 import org.example.response.Response;
 import org.example.response.ResponseMetadata;
@@ -15,7 +17,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Log4j2
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RestaurantServiceException.class)
+    @ExceptionHandler({RestaurantServiceException.class, MenuServiceException.class, OpenHourServiceException.class,
+    RestaurantServiceException.class})
     public ResponseEntity<Response<?>> handleRestaurantServiceException(RestaurantServiceException e){
         log.error(e.getMessage());
         return buildResponse(StatusMessage.UNKNOWN_INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

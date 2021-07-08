@@ -32,7 +32,7 @@ public class ProducerService {
         log.info(String.format("$$$$ => Producing message: %s", reservationStreamDTO));
         System.out.println("Inside the Producer Service before sending data to Topic");
         reservationStreamDTOKafkaTemplate.executeInTransaction(t -> {
-            ListenableFuture<SendResult<String, ReservationStreamDTO>> future = t.send(JSON_TOPIC, Integer.toString(reservationStreamDTO.getReservationDTO().getReservationId()), reservationStreamDTO);
+            ListenableFuture<SendResult<String, ReservationStreamDTO>> future = t.send(JSON_TOPIC, reservationStreamDTO.getReservationDTO().getReservationId(), reservationStreamDTO);
             future.addCallback(new ListenableFutureCallback<SendResult<String, ReservationStreamDTO>>() {
                 @Override
                 public void onSuccess(SendResult<String, ReservationStreamDTO> result) {
