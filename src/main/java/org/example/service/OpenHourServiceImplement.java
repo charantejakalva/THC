@@ -47,12 +47,9 @@ public class OpenHourServiceImplement implements  OpenHourService{
        try{
            Pageable pageDetails = PageRequest.of(page, size);
            List<OpenHours> openHoursList = openHourRepository.findAll(pageDetails).getContent();
-
-
            List<OpenHoursDTO> openHoursDTOList =  new ArrayList<>();
            for (int i =0; i < openHoursList.size();i++){
                openHoursDTOList.add(convertEntitytoDTO(openHoursList.get(i)));
-
            }
            return openHoursDTOList;
        }

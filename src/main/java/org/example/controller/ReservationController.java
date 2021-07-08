@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.example.dto.ReservationDTO;
@@ -28,7 +29,7 @@ public class ReservationController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<List<ReservationDTO>> getReservations(@PathVariable(value = "id") String restaurantId,
+    public Response<List<ReservationDTO>> getReservations(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String restaurantId,
                                                              @PathVariable(value = "page") int page,
                                                              @PathVariable(value = "size") int size){
 
@@ -66,7 +67,7 @@ public class ReservationController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<ReservationDTO> getReservationById(@PathVariable String id){
+    public Response<ReservationDTO> getReservationById(@ApiParam(required = true,value = "Reservation ID") @PathVariable(value = "id") String id){
 
         if( service.getReservationById(id) == null){
             return  Response.< ReservationDTO>builder().meta(ResponseMetadata.builder()
@@ -90,7 +91,7 @@ public class ReservationController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<ReservationDTO> addReservation(@PathVariable(value = "id") String restaurantId,
+    public Response<ReservationDTO> addReservation(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String restaurantId,
                                                    @RequestBody ReservationDTO reservationDTO){
 
 
@@ -109,7 +110,7 @@ public class ReservationController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO){
+    public Response<ReservationDTO> updateReservation(@ApiParam(required = true,value = "RestaurantId") @PathVariable String id,@RequestBody ReservationDTO reservationDTO){
 
         if( service.updateReservation(reservationDTO) == null){
             return  Response.< ReservationDTO>builder().meta(ResponseMetadata.builder()
@@ -134,7 +135,8 @@ public class ReservationController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public  Response<String> deleteReservation(@RequestBody ReservationDTO reservationDTO){
+    public  Response<String> deleteReservation(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String id,
+                                               @RequestBody ReservationDTO reservationDTO){
 
         return Response.<String>builder().meta(ResponseMetadata.builder()
                 .statusCode(200)

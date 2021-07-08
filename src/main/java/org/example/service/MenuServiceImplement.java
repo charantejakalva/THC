@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.example.dto.MenuDTO;
 import org.example.exception.MenuServiceException;
 import org.example.exception.ReservationServiceException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Log4j2
 public class MenuServiceImplement implements MenuService {
     private final MenuRepository menuRepository;
     private  final RestaurantRepository restaurantRepository;
@@ -30,6 +32,7 @@ public class MenuServiceImplement implements MenuService {
            Menu menu = convertDTOtoEntity(menuDTO);
            Menu responseEntity = menuRepository.save(menu);
            responseDTO = convertEntitytoDTO(responseEntity);
+           log.info("Added menu to the RestaurantId {} : {}", restaurantId,responseEntity);
            return responseDTO;
 
        }
@@ -49,10 +52,11 @@ public class MenuServiceImplement implements MenuService {
             for (int i =((page-1)*size); i < last;i++){
                 menuDTOList.add(convertEntitytoDTO(menuList.get(i)));
             }
+            log.info("Total Menus obtained: {}", menuList.size());
             return menuDTOList;
         }
         catch (Exception e){
-            throw new ReservationServiceException("Internal Server Error");
+            throw new MenuServiceException("Internal Server Error");
         }
     }
 
@@ -63,17 +67,13 @@ public class MenuServiceImplement implements MenuService {
                 Menu menu = new Menu();
                 menu.setMenuId(menuDTO.getMenuId());
                 menu.setMenuItems(menuDTO.getMenuItems());
-
                 Menu menuResponse = menuRepository.save(menu);
-
+                log.info("Updated Menu: {}",menuResponse);
                 return convertEntitytoDTO(menuResponse);
-
-
             }
             catch (Exception e){
                 throw new MenuServiceException("Internal server Error");
             }
-
         }
         else{
             return null;
@@ -85,6 +85,7 @@ public class MenuServiceImplement implements MenuService {
         try{
             Menu menu = convertDTOtoEntity(menuDTO);
             menuRepository.delete(menu);
+            log.info("ID of the Menu Deleted {}",menuDTO.getMenuId());
             return "Deleted Successfully";
         }
         catch (Exception e){
@@ -95,6 +96,7 @@ public class MenuServiceImplement implements MenuService {
     @Override
     public MenuDTO getMenuById(String id) {try {
         if(menuRepository.findById(id).isPresent()) {
+            log.info("Menu Id requested {}",id);
             return convertEntitytoDTO(menuRepository.findById(id).get());
         }
         else{

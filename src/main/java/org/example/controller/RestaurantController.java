@@ -63,7 +63,7 @@ public class RestaurantController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<Optional<RestaurantDTO>> getRestaurantById(@PathVariable String id){
+    public Response<Optional<RestaurantDTO>> getRestaurantById(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String id){
 
 
             return Response.<Optional<RestaurantDTO>>builder().meta(ResponseMetadata.builder()
@@ -95,7 +95,7 @@ public class RestaurantController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<String> deleteRestaurant(@PathVariable String id){
+    public Response<String> deleteRestaurant(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String id){
         
         return Response.<String>builder().meta(ResponseMetadata.builder()
         .statusCode(200)

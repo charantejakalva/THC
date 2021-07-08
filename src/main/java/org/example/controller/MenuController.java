@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.example.dto.MenuDTO;
@@ -71,7 +72,7 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<MenuDTO> addReservation(@PathVariable(value = "id") String restaurantId,
+    public Response<MenuDTO> addReservation(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String restaurantId,
                                                    @RequestBody MenuDTO menuDTO){
 
 
@@ -89,7 +90,7 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<MenuDTO> updateMenu(@RequestBody MenuDTO menuDTO){
+    public Response<MenuDTO> updateMenu(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String id, @RequestBody MenuDTO menuDTO){
 
         if( service.updateMenu(menuDTO) == null){
             return  Response.<MenuDTO>builder().meta(ResponseMetadata.builder()
@@ -114,12 +115,13 @@ public class MenuController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public  Response<String> deleteMenu(@RequestBody MenuDTO menuDTO){
+    public  Response<String> deleteMenu(@ApiParam(required = true,value = "RestaurantId") @PathVariable(value = "id") String id, @RequestBody MenuDTO menuDTO){
 
         return Response.<String>builder().meta(ResponseMetadata.builder()
                 .statusCode(200)
                 .statusMessage(HttpStatus.OK.toString()).build()
         ).data((service.deleteMenu(menuDTO))).build();
+
     }
 
 }

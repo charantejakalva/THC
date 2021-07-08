@@ -61,33 +61,22 @@ public class ReservationServiceImplement implements ReservationService {
     private Reservation convertDTOtoEntity(ReservationDTO reservationDTO){
         Reservation reservation = new Reservation();
         BeanUtils.copyProperties(reservationDTO,reservation);
-
         return reservation;
-
     }
     @Override
     public List<ReservationDTO> getReservations(String restaurantId, int page, int size) {
         try{
 //            Pageable pageDetails = PageRequest.of(page, size);
-
 //            List<Reservation> reservation =  (List<Reservation>) reservationRepository.findAll();
 //            List<Reservation> reservation =  (List<Reservation>) reservationRepository.findAll(pageDetails).getContent();
             Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
 
             List<Reservation> reservation = restaurant.getReservations();
-
             List<ReservationDTO> reservationDTOList =  new ArrayList<>();
             int last = Math.min(reservation.size(), (page)*(size)) ;
             for (int i =((page-1)*size); i < last;i++){
-//                if(reservation.get(i).getReservationId() == restaurantId) {
                     reservationDTOList.add(convertEntitytoDTO(reservation.get(i)));
-//                }
             }
-//            if(reservationDTOList.size() > 0){
-//                return reservationDTOList.get(0);
-//            }
-//            else
-//                return new ReservationDTO();
             return reservationDTOList;
         }
         catch (Exception e){

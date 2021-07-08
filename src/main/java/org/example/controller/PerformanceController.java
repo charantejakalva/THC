@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.example.model.Interceptor;
@@ -30,7 +31,7 @@ public class PerformanceController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
             @ApiResponse(code = 200,message = "Successful")
     })
-    public Response<List<Interceptor>> getPerformanceRecordsByName(@PathVariable(value = "name") String controllerName){
+    public Response<List<Interceptor>> getPerformanceRecordsByName(@ApiParam(required = true,name = "RestaurantId", defaultValue = "Restaurant") @PathVariable(value = "name") String controllerName){
 
         return  Response.<List<Interceptor>>builder().meta(ResponseMetadata.builder()
                 .statusCode(200)

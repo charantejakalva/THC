@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.example.dto.MenuDTO;
 import org.example.dto.OpenHoursDTO;
 import org.example.dto.ReservationDTO;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class RestaurantServiceImplement implements RestaurantService{
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -33,18 +35,20 @@ public class RestaurantServiceImplement implements RestaurantService{
     }
     public RestaurantServiceImplement(){}
     public List<RestaurantDTO> getRestaurant(Integer page, Integer size) {
-        Pageable pageDetails = PageRequest.of(page, size);
+        try {
+            Pageable pageDetails = PageRequest.of(page, size);
+            List<Restaurant> restaurants = (List<Restaurant>) restaurantRepository.findAll(pageDetails).getContent();
+            List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+            for (int i = 0; i < restaurants.size(); i++) {
+                restaurantDTOList.add(convertEntitytoDTO(restaurants.get(i)));
+            }
+            log.info("The number of Restaurants returned are {}", restaurantDTOList.size());
 
-        List<Restaurant> restaurants =  (List<Restaurant>) restaurantRepository.findAll(pageDetails).getContent();
-
-        List<RestaurantDTO> restaurantDTOList =  new ArrayList<>();
-
-        for (int i =0; i < restaurants.size();i++){
-            restaurantDTOList.add(convertEntitytoDTO(restaurants.get(i)));
+            return restaurantDTOList;
         }
-
-
-        return restaurantDTOList;
+        catch (Exception e){
+            throw new RestaurantServiceException("Error in getting Restaurants");
+        }
     }
 
     public RestaurantDTO addRestaurant(RestaurantDTO restaurantDTO ){
@@ -54,6 +58,7 @@ public class RestaurantServiceImplement implements RestaurantService{
             Restaurant restaurant = convertDTOtoEntity(restaurantDTO);
             Restaurant responseEntity = restaurantRepository.save(restaurant);
             responseDTO = convertEntitytoDTO(responseEntity);
+            log.info("The response entity obtained after adding the restaurant is {}", responseEntity);
             return responseDTO;
 //            Restaurant entity = new Restaurant();
 //            BeanUtils.copyProperties(restaurantDTO,entity);
@@ -86,9 +91,6 @@ public class RestaurantServiceImplement implements RestaurantService{
 //            RestaurantDTO responseDTO = new RestaurantDTO();
 //            responseDTO = convertEntitytoDTO(responseEntity);
 //        return responseDTO;
-
-
-
         }
         catch (Exception ex){
             throw new RestaurantServiceException("Internal Server Error");
@@ -130,9 +132,11 @@ public class RestaurantServiceImplement implements RestaurantService{
             if(restaurantRepository.findById(id).isPresent()) {
                 Optional<Restaurant> restaurant = restaurantRepository.findById(id);
                 RestaurantDTO restaurantDTO = convertEntitytoDTO(restaurant.get());
+                log.info("Logging the Id of the Restaurant: {}", id);
                 return Optional.of(restaurantDTO);
             }
             else{
+                log.info("No Restaurant matched with the given ID");
                 return null;
             }
         }
@@ -169,10 +173,14 @@ public class RestaurantServiceImplement implements RestaurantService{
                 restaurant.setPhoneNumber(restaurantDTO.getPhoneNumber());
 
                 Restaurant responseRestaurant = restaurantRepository.save(restaurant);
+            log.info("The response entity obtained after adding the restaurant is {}", responseRestaurant);
+
                 return convertEntitytoDTO(responseRestaurant);
 
         }
         catch (Exception e){
+
+            log.info("Logging Error: {}", e.getMessage());
             throw  new RestaurantServiceException("Cannot update the Restaurant");
         }
 
@@ -181,11 +189,12 @@ public class RestaurantServiceImplement implements RestaurantService{
     @Override
     public String deleteRestaurant(String id) {
         try {
-
             restaurantRepository.deleteById(id);
+            log.info("Logging the Id of deleted Restaurant {}",id);
             return "Deleted Successfully";
         }
         catch (Exception ex){
+            log.info("Logging Error {}",ex.getMessage());
             throw  new RestaurantServiceException("Problem in Deletion");
         }
 
