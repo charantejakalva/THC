@@ -23,13 +23,13 @@ public class Restaurant {
 
     private String phoneNumber;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL},  orphanRemoval = true)
     private List<Menu> menu;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL},  orphanRemoval = true)
     private List<Reservation> reservations;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL},  orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OpenHours> openHours;
 
 //    public int getRestaurantId() {

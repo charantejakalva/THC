@@ -97,6 +97,7 @@ public class MenuServiceImplement implements MenuService {
     public MenuDTO getMenuById(String id) {try {
         if(menuRepository.findById(id).isPresent()) {
             log.info("Menu Id requested {}",id);
+
             return convertEntitytoDTO(menuRepository.findById(id).get());
         }
         else{

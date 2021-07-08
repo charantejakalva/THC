@@ -12,6 +12,6 @@ public interface ReservationService {
     List<ReservationDTO> getAllReservations(int page,int size);
     List<ReservationDTO> getReservations(String id, int page, int size);
     ReservationDTO updateReservation(ReservationDTO reservationDTO);
-    String deleteReservation(ReservationDTO reservationDTO);
+    String deleteReservation(String restaurantId, ReservationDTO reservationDTO);
     ReservationDTO getReservationById(String id);
 }

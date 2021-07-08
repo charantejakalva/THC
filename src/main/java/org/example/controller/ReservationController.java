@@ -141,7 +141,7 @@ public class ReservationController {
         return Response.<String>builder().meta(ResponseMetadata.builder()
                 .statusCode(200)
                 .statusMessage(HttpStatus.OK.toString()).build()
-        ).data((service.deleteReservation(reservationDTO))).build();
+        ).data((service.deleteReservation(id ,reservationDTO))).build();
     }
 
 }

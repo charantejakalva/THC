@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.example.dto.OpenHoursDTO;
 import org.example.exception.OpenHourServiceException;
 import org.example.model.OpenHours;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Log4j2
 public class OpenHourServiceImplement implements  OpenHourService{
 
     private final OpenHourRepository openHourRepository;
@@ -34,7 +36,7 @@ public class OpenHourServiceImplement implements  OpenHourService{
            restaurant.setOpenHours(openHoursList);
            String openHoursId = openHours.getId();
            Restaurant responseEntity = restaurantRepository.save(restaurant);
-
+           log.info("RestaurantId : {} and Open Hours data:{}",restaurantId,openHoursDTO);
            return convertEntitytoDTO(openHourRepository.findById(openHoursId).get());
        }
        catch (Exception e){
@@ -64,7 +66,7 @@ public class OpenHourServiceImplement implements  OpenHourService{
             Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
 
             List<OpenHours> openHoursList = restaurant.getOpenHours();
-
+            log.info("RestaurantId: {}", restaurantId);
             List<OpenHoursDTO> openHoursDTOList = new ArrayList<>();
             int last = Math.min(openHoursList.size(), (page) * (size));
             for (int i = ((page - 1) * size); i < last; i++) {
@@ -88,7 +90,7 @@ public class OpenHourServiceImplement implements  OpenHourService{
 
                 OpenHours response = openHourRepository.save(openHours);
                 OpenHoursDTO responseDTO = convertEntitytoDTO(response);
-
+                log.info("Updated OpenHours data:{}",responseDTO);
                 return responseDTO;
 
             } catch (Exception e) {

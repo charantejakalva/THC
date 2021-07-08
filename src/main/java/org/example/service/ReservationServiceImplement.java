@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.example.dto.ReservationDTO;
 import org.example.dto.RestaurantDTO;
 import org.example.exception.ReservationServiceException;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class ReservationServiceImplement implements ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -39,6 +41,7 @@ public class ReservationServiceImplement implements ReservationService {
             reservationList.add(reservation);
             restaurant.setReservations(reservationList);
 //            String reservationId = reservation.getReservationId();
+            log.info("Adding Reservation data: {} to the RestaurantId: {}", reservation,restaurantId);
             Restaurant responseEntity = restaurantRepository.save(restaurant);
             Optional<Reservation> responseReservation = responseEntity.getReservations().stream().
                     filter(p -> p.getCustomerEmail().equals(reservation.getCustomerEmail()) &&
@@ -77,6 +80,7 @@ public class ReservationServiceImplement implements ReservationService {
             for (int i =((page-1)*size); i < last;i++){
                     reservationDTOList.add(convertEntitytoDTO(reservation.get(i)));
             }
+            log.info("Total number of reservations: {}",reservation.size());
             return reservationDTOList;
         }
         catch (Exception e){
@@ -94,6 +98,7 @@ public class ReservationServiceImplement implements ReservationService {
             for (int i =0; i < reservation.size();i++){
                     reservationDTOList.add(convertEntitytoDTO(reservation.get(i)));
             }
+            log.info("Number of Reservations: {}",reservation.size());
             return reservationDTOList;
         }
         catch (Exception e){
@@ -113,6 +118,7 @@ public class ReservationServiceImplement implements ReservationService {
             reservation.setReservationStartTime(reservationDTO.getReservationStartTime());
 
             Reservation responseReservation = reservationRepository.save(reservation);
+            log.info("Updated Reservation data: {}",responseReservation);
             return convertEntitytoDTO(responseReservation);
             }
             catch(Exception e){
@@ -126,10 +132,17 @@ public class ReservationServiceImplement implements ReservationService {
     }
 
     @Override
-    public String deleteReservation(ReservationDTO reservationDTO) {
+    public String deleteReservation(String restaurantId, ReservationDTO reservationDTO) {
        try{
-           Reservation reservation = convertDTOtoEntity(reservationDTO);
+            Reservation reservation = convertDTOtoEntity(reservationDTO);
+            Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
+//            restaurant.getReservations().remove(reservation);
+            List<Reservation> reservationList = restaurant.getReservations();
+            reservationList.removeIf(x -> x.getReservationId().equals(reservationDTO.getReservationId()));
+            restaurant.setReservations(reservationList);
+            restaurantRepository.save(restaurant);
             reservationRepository.delete(reservation);
+            log.info("Deleted Reservation ID: {}",reservationDTO.getReservationId() );
            return "Deleted Successfully";
        }
        catch (Exception e){
@@ -141,6 +154,7 @@ public class ReservationServiceImplement implements ReservationService {
     public ReservationDTO getReservationById(String id) {
         try {
             if(reservationRepository.findById(id).isPresent()) {
+                log.info("Reservation Requested is :{}", id);
                 return convertEntitytoDTO(reservationRepository.findById(id).get());
             }
             else{
