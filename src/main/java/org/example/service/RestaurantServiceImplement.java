@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.MenuDTO;
 import org.example.dto.OpenHoursDTO;
 import org.example.dto.ReservationDTO;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Log4j2
+@Log4j2 //@Slf4j
 public class RestaurantServiceImplement implements RestaurantService{
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -60,37 +61,6 @@ public class RestaurantServiceImplement implements RestaurantService{
             responseDTO = convertEntitytoDTO(responseEntity);
             log.info("The response entity obtained after adding the restaurant is {}", responseEntity);
             return responseDTO;
-//            Restaurant entity = new Restaurant();
-//            BeanUtils.copyProperties(restaurantDTO,entity);
-//            List<Menu> menuList = new ArrayList<>(restaurantDTO.getMenu().size());
-//            List<Reservation> reservationList  = new ArrayList<>(restaurantDTO.getReservations().size());
-//            List<OpenHours> openHoursList = new ArrayList<>(restaurantDTO.getOpenHours().size());
-//            for (int i = 0; i < restaurantDTO.getMenu().size(); i++){
-//                Menu menu = new Menu();
-//                BeanUtils.copyProperties(restaurantDTO.getMenu().get(i), menu);
-//                menu.setRestaurant(entity);
-//                menuList.add(menu);
-//            }
-//            for (int i =0; i < restaurantDTO.getReservations().size();i++){
-//                Reservation reservation = new Reservation();
-//                BeanUtils.copyProperties(restaurantDTO.getReservations().get(i), reservation);
-//                reservation.setRestaurant(entity);
-//                reservationList.add(reservation);
-//            }
-//            for (int i =0; i < restaurantDTO.getOpenHours().size(); i++){
-//                OpenHours openHours =  new OpenHours();
-//                BeanUtils.copyProperties(restaurantDTO.getOpenHours().get(i), openHours);
-//                openHours.setRestaurant(entity);
-//                openHoursList.add(openHours);
-//            }
-//            entity.setMenu(menuList);
-//            entity.setReservations(reservationList);
-//            entity.setOpenHours(openHoursList);
-//
-//            Restaurant responseEntity = restaurantRepository.save(entity);
-//            RestaurantDTO responseDTO = new RestaurantDTO();
-//            responseDTO = convertEntitytoDTO(responseEntity);
-//        return responseDTO;
         }
         catch (Exception ex){
             throw new RestaurantServiceException("Internal Server Error");
@@ -120,8 +90,6 @@ public class RestaurantServiceImplement implements RestaurantService{
         restaurant.setOpenHours(openHours);
         List<Menu> menus =  MapperUtil.mapList(restaurantDTO.getMenu(), Menu.class);
         restaurant.setMenu(menus);
-
-
         return restaurant;
 
     }
@@ -154,15 +122,6 @@ public class RestaurantServiceImplement implements RestaurantService{
 
                 restaurant.setRestaurantName(restaurantDTO.getRestaurantName());
 
-//                List<Reservation> reservations = new ArrayList<>();
-//                BeanUtils.copyProperties(restaurantDTO.getReservations(), reservations);
-//                restaurant.setReservations(reservations);
-//                List<OpenHours> openHours = new ArrayList<>();
-//                BeanUtils.copyProperties(restaurantDTO.getOpenHours(), openHours);
-//                restaurant.setOpenHours(openHours);
-//                List<Menu> menus = new ArrayList<>();
-//                BeanUtils.copyProperties(restaurantDTO.getMenu(), menus);
-//                restaurant.setMenu(menus);
                 List<Reservation> reservations =  MapperUtil.mapList(restaurantDTO.getReservations(), Reservation.class);
                 restaurant.setReservations(reservations);
                 List<OpenHours> openHours =  MapperUtil.mapList(restaurantDTO.getOpenHours(), OpenHours.class);

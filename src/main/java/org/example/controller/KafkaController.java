@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 // 1.) .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 // 2.) .\bin\windows\kafka-server-start.bat .\config\server.properties
 // Create Kafka Topic to send the data to.
-// 3.) .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181--replication-factor 1 --partitions 1 --topic TOPIC_NAME
+// 3.) .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic TOPIC_NAME
 
 
 
